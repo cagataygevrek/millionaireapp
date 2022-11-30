@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 
-export default function Timer({ setStop, questionNumber }) {
-  const [timer, setTimer] = useState(30);
+export default function Timer({ yarismayiDurduruGuncelle, soruSayisi }) {
+  const [sayac, sayaciGuncelle] = useState(30);
 
   useEffect(() => {
-    if (timer === 0) return setStop(true);
+    if (sayac === 0) return yarismayiDurduruGuncelle(true);
     const interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
+      sayaciGuncelle((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [setStop, timer]);
+  }, [yarismayiDurduruGuncelle, sayac]);
 
   useEffect(() => {
-    setTimer(30);
-  }, [questionNumber]);
-  return timer;
+    sayaciGuncelle(30);
+  }, [soruSayisi]);
+  return sayac;
 }

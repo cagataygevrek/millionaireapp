@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 
 export default function Trivia({
-  data,
-  setStop,
-  questionNumber,
-  setQuestionNumber,
+  sorular,
+  yarismayiDurduruGuncelle,
+  soruSayisi,
+  soruSayisiniGuncelle,
 }) {
-  const [question, setQuestion] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [soru, soruyuGuncelle] = useState(null);
+  const [verilenCevap, verilenCevabiGuncelle] = useState(null);
   const [className, setClassName] = useState("answer");
 
   useEffect(() => {
-    setQuestion(data[questionNumber - 1]);
-  }, [data, questionNumber]);
+    soruyuGuncelle(sorular[soruSayisi - 1]);
+  }, [sorular, soruSayisi]);
 
   const delay = (duration, callback) => {
     setTimeout(() => {
@@ -21,28 +21,28 @@ export default function Trivia({
   };
 
   const handleClick = (a) => {
-    setSelectedAnswer(a);
+    verilenCevabiGuncelle(a);
     setClassName("answer active");
     delay(3000, () =>
       setClassName(a.correct ? "answer correct" : "answer wrong")
     );
     delay(6000, () => {
       if (a.correct) {
-        setQuestionNumber((prev) => prev + 1);
-        setSelectedAnswer(null);
+        soruSayisiniGuncelle((oncekiSoru) => oncekiSoru + 1);
+        verilenCevabiGuncelle(null);
       } else {
-        setStop(true);
+        yarismayiDurduruGuncelle(true);
       }
     });
   };
 
   return (
     <div className="trivia">
-      <div className="question">{question?.question}</div>
+      <div className="question">{soru?.question}</div>
       <div className="answers">
-        {question?.answers.map((a) => (
+        {soru?.answers.map((a) => (
           <div
-            className={selectedAnswer === a ? className : "answer"}
+            className={verilenCevap === a ? className : "answer"}
             onClick={() => handleClick(a)}
           >
             {a.text}

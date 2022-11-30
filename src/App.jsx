@@ -4,11 +4,11 @@ import Timer from "./components/Timer";
 import Trivia from "./components/Trivia";
 
 function App() {
-  const [questionNumber, setQuestionNumber] = useState(1);
-  const [stop, setStop] = useState(false);
-  const [earned, setEarned] = useState("0 ₺");
+  const [soruSayisi, soruSayisiniGuncelle] = useState(1);
+  const [yarismayiDurdur, yarismayiDurduruGuncelle] = useState(false);
+  const [tutar, tutariGuncelle] = useState("0 ₺");
 
-  const data = [
+  const sorular = [
     {
       id: 1,
       question: "ReactJS'i hangi şirket geliştirmiştir?",
@@ -353,7 +353,7 @@ function App() {
     },
   ];
 
-  const moneyPyramid = useMemo(
+  const soruListesi = useMemo(
     () =>
       [
         { id: 1, tutar: "100 ₺" },
@@ -376,27 +376,30 @@ function App() {
   );
 
   useEffect(() => {
-    questionNumber > 1 &&
-      setEarned(moneyPyramid.find((m) => m.id === questionNumber - 1).tutar);
-  }, [moneyPyramid, questionNumber]);
+    soruSayisi > 1 &&
+      tutariGuncelle(soruListesi.find((m) => m.id === soruSayisi - 1).tutar);
+  }, [soruListesi, soruSayisi]);
   return (
     <div className="app">
       <div className="main">
-        {stop ? (
-          <h1 className="endText">Kazanılan tutar: {earned}</h1>
+        {yarismayiDurdur ? (
+          <h1 className="endText">Kazanılan tutar: {tutar}</h1>
         ) : (
           <>
             <div className="top">
               <div className="timer">
-                <Timer setStop={setStop} questionNumber={questionNumber} />
+                <Timer
+                  yarismayiDurduruGuncelle={yarismayiDurduruGuncelle}
+                  soruSayisi={soruSayisi}
+                />
               </div>
             </div>
             <div className="bottom">
               <Trivia
-                data={data}
-                setStop={setStop}
-                questionNumber={questionNumber}
-                setQuestionNumber={setQuestionNumber}
+                sorular={sorular}
+                yarismayiDurduruGuncelle={yarismayiDurduruGuncelle}
+                soruSayisi={soruSayisi}
+                soruSayisiniGuncelle={soruSayisiniGuncelle}
               />
             </div>
           </>
@@ -404,12 +407,10 @@ function App() {
       </div>
       <div className="pyramid">
         <ul className="moneyList">
-          {moneyPyramid.map((m) => (
+          {soruListesi.map((m) => (
             <li
               className={
-                questionNumber === m.id
-                  ? "moneyListItem active"
-                  : "moneyListItem"
+                soruSayisi === m.id ? "moneyListItem active" : "moneyListItem"
               }
             >
               <span className="moneyListItemNumber">{m.id}</span>
